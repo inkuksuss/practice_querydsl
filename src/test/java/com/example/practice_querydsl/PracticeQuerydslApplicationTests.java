@@ -9,5 +9,4 @@ class PracticeQuerydslApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
