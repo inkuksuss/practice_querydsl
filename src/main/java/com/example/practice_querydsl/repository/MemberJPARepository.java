@@ -1,11 +1,15 @@
 package com.example.practice_querydsl.repository;
 
+import com.example.practice_querydsl.dto.MemberSearchCondition;
+import com.example.practice_querydsl.dto.MemberTeamDto;
+import com.example.practice_querydsl.dto.QMemberTeamDto;
 import com.example.practice_querydsl.entity.Member;
 import com.example.practice_querydsl.entity.QMember;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,5 +41,22 @@ public class MemberJPARepository {
                 .setParameter("name", name)
                 .getResultStream()
                 .findAny();
+    }
+
+    public List<MemberTeamDto> searchByBuilder(MemberSearchCondition condition) {
+        return queryFactory
+                .select(new QMemberTeamDto(
+
+                ))
+//                .from(member)
+//                .leftJoin(team)
+//                .where(
+//                        member.name.eq(condition.getMemberName()),
+//                        team.name.eq(condition.getTeamName()),
+//                        member.age.goe(condition.getAgeGoe()),
+//                        member.age.loe(condition.getAgeLoe())
+//                )
+//                .fetch();
+        return new ArrayList<>();
     }
 }
