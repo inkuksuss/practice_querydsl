@@ -11,7 +11,6 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.ExpressionUtils;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -27,6 +26,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 
 import java.util.List;
 
@@ -619,4 +619,63 @@ public class QuerydslTest {
                 .where(builder)
                 .fetch();
     }
+
+    @Test
+    @Commit
+    void bulkUpdate() {
+        long updatedName = query
+                .update(member)
+                .set(member.name, "_updated")
+                .where(member.age.lt(21))
+                .execute();
+        em.flush();
+        em.clear();
+    }
+
+    @Test
+    void bulkAdd() {
+        long execute = query
+                .update(member)
+                .set(member.age, member.age.add(1))
+                .execute();
+    }
+
+    @Test
+    void bulkDelete() {
+        long execute = query
+                .delete(member)
+                .where(member.age.lt(21))
+                .execute();
+    }
+
+    @Test
+    void sqlFunc() {
+        List<String> fetch = query
+                .select(
+                        Expressions.stringTemplate("function('replace', {0}, {1}, {2})", member.name, "member", "M")
+                )
+                .from(member)
+                .fetch();
+
+        for (String s : fetch) {
+            System.out.println("s = " + s);
+        }
+    }
+
+    @Test
+    void sqlFunc2() {
+        List<String> fetch = query
+                .select(member.name)
+                .from(member)
+                .where(member.name.eq(
+//                        Expressions.stringTemplate("function('lower', {0})", member.name)
+                        member.name.lower()
+                ))
+                .fetch();
+
+        for (String s : fetch) {
+            System.out.println("s = " + s);
+        }
+    }
+
 }
