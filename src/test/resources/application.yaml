@@ -1,0 +1,26 @@
+server:
+  port: 8082
+
+spring:
+  profiles:
+    active: test
+  application:
+    name:
+  datasource:
+    url: jdbc:mysql://localhost:3306/querydsl?useSSL=false&serverTimezone=UTC
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      database-platform: org.hibernate.dialect.MySQLDialect
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
